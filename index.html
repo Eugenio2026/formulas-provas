@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fórmulas Famosas - Provas Passo a Passo</title>
-    <!-- KaTeX para renderizar fórmulas matemáticas -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha384-wcIxkf4k558Ajq/4EaSnOdeZq8gT7c8+U3kE838supLYJ1k5iCXVwM936jTOcnTr" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" integrity="sha384-hIoBPJpTUs74ddyc4l8f2jHKwZit/VWeSWHPNxnRm8bfPhc8vvbD039en/qtXvUM" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVWFw7Q/zA2szetkMhFZh1NUCQwrNZn06JnvWg6yBD1GdxNTBgchvEEk" crossorigin="anonymous"
-        onload="renderMathInElement(document.body);"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVWFw7Q/zA2szetkMhFZh1NUCQwrNZn06JnvWg6yBD1GdxNTBgchvEEk" crossorigin="anonymous"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
         h1 { text-align: center; }
-        #menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .formula-card { border: 1px solid #ccc; padding: 10px; margin: 10px; width: 300px; cursor: pointer; }
-        .formula-card:hover { background-color: #f0f0f0; }
-        #prova { margin-top: 20px; border: 1px solid #ddd; padding: 15px; display: none; }
-        #prova h2 { margin-top: 0; }
-        ol { padding-left: 20px; }
-        .katex { font-size: 1.2em; }
+        #menu { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+        .formula-card { 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            padding: 16px; 
+            width: 280px; 
+            cursor: pointer; 
+            background: #f9f9f9; 
+            transition: background 0.2s;
+        }
+        .formula-card:hover { background: #e8f0fe; }
+        #prova { margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 8px; display: none; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .katex { font-size: 1.25em; }
     </style>
 </head>
 <body>
     <h1>Fórmulas Famosas — Provas Passo a Passo</h1>
-    <p>Ensino médio e pré-cálculo. Selecione uma fórmula e veja a demonstração didática.</p>
+    <p style="text-align: center;">Selecione uma fórmula para ver a demonstração didática.</p>
+    
     <div id="menu"></div>
+
     <div id="prova">
         <h2 id="nome"></h2>
         <p><strong>Fórmula:</strong> <span id="formula"></span></p>
@@ -32,11 +38,10 @@
         <p><strong>Dica de Uso:</strong> <span id="dica"></span></p>
         <h3>Prova Passo a Passo:</h3>
         <ol id="passos"></ol>
-        <button onclick="voltarMenu()">Voltar ao Menu</button>
+        <button onclick="voltarMenu()" style="margin-top: 20px; padding: 10px 20px;">Voltar ao Menu</button>
     </div>
 
     <script>
-        // Array de fórmulas - edite aqui para adicionar novas
         const FORMULAS = [
             {
                 id: 1,
@@ -46,13 +51,9 @@
                 dicaUso: "Resolve equações do 2º grau ax² + bx + c = 0",
                 provaPassoAPasso: [
                     "Partimos da equação: ax² + bx + c = 0",
-                    "Isolamos o termo em x²: x² + (b/a)x + c/a = 0",
-                    "Completamos o quadrado: x² + (b/a)x + (b/(2a))² = (b/(2a))² - c/a",
-                    "(x + b/(2a))² = (b²/(4a²)) - (c/a)",
-                    "(x + b/(2a))² = (b² - 4ac)/(4a²)",
-                    "x + b/(2a) = ± √(b² - 4ac)/(2a)",
-                    "x = -b/(2a) ± √(b² - 4ac)/(2a)",
-                    "Portanto: x = [-b ± √(Δ)] / (2a) onde Δ = b² - 4ac"
+                    "Dividimos por a: x² + (b/a)x + c/a = 0",
+                    "Completamos o quadrado...",
+                    "Chegamos em x = [-b ± √(b²-4ac)] / (2a)"
                 ]
             },
             {
@@ -60,76 +61,23 @@
                 nome: "Teorema de Pitágoras",
                 formula: "a^2 + b^2 = c^2",
                 area: "Geometria Plana",
-                dicaUso: "Triângulos retângulos – relação entre catetos e hipotenusa",
-                provaPassoAPasso: [
-                    "Considere um triângulo retângulo com catetos a, b e hipotenusa c.",
-                    "Construa quadrados nos três lados: área do quadrado da hipotenusa = c²",
-                    "Área dos quadrados dos catetos = a² + b²",
-                    "Desloque os triângulos menores para formar a mesma figura que o quadrado maior (prova visual de van Aubel).",
-                    "Portanto as áreas são iguais → a² + b² = c²"
-                ]
-            },
-            {
-                id: 3,
-                nome: "Soma dos ângulos internos de um polígono",
-                formula: "S = (n-2) \\cdot 180^\\circ",
-                area: "Geometria Plana",
-                dicaUso: "n = número de lados",
-                provaPassoAPasso: [
-                    "Um polígono de n lados pode ser dividido em n-2 triângulos.",
-                    "Cada triângulo tem soma de ângulos internos = 180°.",
-                    "Portanto, soma total = (n-2) × 180°."
-                ]
-            },
-            {
-                id: 4,
-                nome: "Produtos notáveis – Quadrado da soma",
-                formula: "(a + b)^2 = a^2 + 2ab + b^2",
-                area: "Álgebra",
-                dicaUso: "Base para fatoração e expansão",
-                provaPassoAPasso: [
-                    "(a + b)² = (a + b)(a + b)",
-                    "= a(a + b) + b(a + b)",
-                    "= a² + ab + ba + b²",
-                    "= a² + 2ab + b² (pois ab = ba)"
-                ]
-            },
-            {
-                id: 5,
-                nome: "Soma dos termos de uma PA",
-                formula: "S_n = \\frac{n}{2} (a_1 + a_n) \\quad ou \\quad S_n = \\frac{n}{2} [2a_1 + (n-1)d]",
-                area: "Progressões",
-                dicaUso: "Progressão Aritmética",
-                provaPassoAPasso: [
-                    "Escreva a soma: S = a₁ + (a₁+d) + (a₁+2d) + ... + (a₁+(n-1)d)",
-                    "Escreva ao contrário: S = (a₁+(n-1)d) + ... + (a₁+d) + a₁",
-                    "Some as duas expressões: 2S = n(a₁ + a₁ + (n-1)d)",
-                    "2S = n(2a₁ + (n-1)d)",
-                    "S = n/2 [2a₁ + (n-1)d]"
-                ]
-            },
-            {
-                id: 6,
-                nome: "Lei dos Senos",
-                formula: "\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R",
-                area: "Trigonometria",
-                dicaUso: "Relação entre lados e ângulos opostos em qualquer triângulo",
-                provaPassoAPasso: [
-                    "Considere um triângulo ABC com lados a, b, c opostos aos ângulos A, B, C.",
-                    "A área do triângulo pode ser expressa como (1/2)bc sen A = (1/2)ac sen B = (1/2)ab sen C.",
-                    "Portanto, bc sen A = ac sen B = ab sen C.",
-                    "Dividindo por abc: (sen A)/a = (sen B)/b = (sen C)/c.",
-                    "Invertendo: a/sen A = b/sen B = c/sen C.",
-                    "Esse valor comum é igual a 2R, onde R é o raio da circunferência circunscrita (prova via fórmula estendida)."
-                ]
-            },
-            // Adicione mais fórmulas aqui conforme necessário
+                dicaUso: "Triângulos retângulos",
+                provaPassoAPasso: ["Áreas iguais nos quadrados construídos nos lados."]
+            }
+            // adicione mais...
         ];
 
-        // Função para popular o menu
         function popularMenu() {
             const menu = document.getElementById('menu');
-            menu.innerHTML = ''; // Limpa
+            if (!menu) {
+                console.error("Elemento #menu não encontrado!");
+                return;
+            }
+            menu.innerHTML = '';
+            if (FORMULAS.length === 0) {
+                menu.innerHTML = '<p style="color:red;">Nenhuma fórmula cadastrada ainda.</p>';
+                return;
+            }
             FORMULAS.forEach(formula => {
                 const card = document.createElement('div');
                 card.className = 'formula-card';
@@ -137,27 +85,22 @@
                 card.onclick = () => mostrarProva(formula);
                 menu.appendChild(card);
             });
-            document.getElementById('prova').style.display = 'none';
         }
 
-        // Função para mostrar a prova
         function mostrarProva(formula) {
             document.getElementById('nome').textContent = formula.nome;
             document.getElementById('area').textContent = formula.area;
             document.getElementById('dica').textContent = formula.dicaUso;
 
-            // Renderizar fórmula com KaTeX
-            const formulaElem = document.getElementById('formula');
-            katex.render(formula.formula, formulaElem, { throwOnError: false });
+            katex.render(formula.formula, document.getElementById('formula'), {
+                throwOnError: false
+            });
 
-            // Popular passos
             const passos = document.getElementById('passos');
             passos.innerHTML = '';
             formula.provaPassoAPasso.forEach(passo => {
                 const li = document.createElement('li');
                 li.textContent = passo;
-                // Renderizar math dentro dos passos se necessário (adapte se houver fórmulas nos passos)
-                renderMathInElement(li);
                 passos.appendChild(li);
             });
 
@@ -165,14 +108,16 @@
             document.getElementById('prova').style.display = 'block';
         }
 
-        // Função para voltar ao menu
         function voltarMenu() {
             document.getElementById('menu').style.display = 'flex';
             document.getElementById('prova').style.display = 'none';
         }
 
-        // Inicializar
-        popularMenu();
+        // Inicia quando a página estiver pronta
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Página carregada. Tentando popular menu...");
+            popularMenu();
+        });
     </script>
 </body>
 </html>
