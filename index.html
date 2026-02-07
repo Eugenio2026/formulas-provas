@@ -3,193 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathLab - Demonstrações Matemáticas</title>
+    <title>Principia Mathematica | Demonstrações</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
+    
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --sidebar: #ffffff;
-            --text: #1e293b;
-            --accent: #eff6ff;
-            --border: #e2e8f0;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --primary: #000000;
+            --secondary: #666666;
+            --accent: #f0f0f0;
+            --highlight: #0070f3;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; line-height: 1.6; }
 
-        body { display: flex; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-        /* Sidebar */
+        /* Sidebar Elegante */
         nav {
-            width: 280px;
-            background: var(--sidebar);
-            border-right: 1px solid var(--border);
+            width: 300px;
             height: 100vh;
+            border-right: 1px solid var(--accent);
+            padding: 40px 20px;
             position: fixed;
-            padding: 2rem 1rem;
-            overflow-y: auto;
+            background: white;
+            z-index: 10;
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 2rem; color: var(--primary); text-align: center; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; margin-bottom: 40px; border-bottom: 2px solid var(--primary); display: inline-block; }
 
         .menu-item {
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 8px;
+            list-style: none;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: 0.2s;
-            font-weight: 500;
+            color: var(--secondary);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
 
         .menu-item:hover { background: var(--accent); color: var(--primary); }
-        .menu-item.active { background: var(--primary); color: white; shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        .menu-item.active { background: var(--primary); color: white; font-weight: 600; }
 
-        /* Conteúdo Principal */
-        main {
-            margin-left: 280px;
-            flex: 1;
-            padding: 3rem;
-            max-width: 900px;
+        /* Área de Conteúdo */
+        main { margin-left: 300px; width: 100%; max-width: 900px; padding: 80px 100px; }
+
+        h2 { font-size: 2.5rem; letter-spacing: -2px; margin-bottom: 40px; }
+
+        .step-container { margin-top: 40px; }
+
+        .step {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s forwards;
         }
 
-        .step-box {
-            background: white;
-            border-left: 4px solid var(--primary);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 0 8px 8px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .step-title { font-weight: bold; margin-bottom: 0.5rem; color: var(--primary); text-transform: uppercase; font-size: 0.85rem; }
+        .step-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--highlight);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
 
-        .formula-display { font-size: 1.25rem; margin: 1rem 0; text-align: center; }
+        .step-text { font-size: 1.1rem; margin-bottom: 20px; color: #333; }
 
-        @media (max-width: 768px) {
-            nav { width: 100%; height: auto; position: relative; border-right: none; }
+        .math-box {
+            background: var(--accent);
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid #e5e5e5;
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            nav { width: 100%; height: auto; position: relative; border-bottom: 1px solid var(--accent); }
             body { flex-direction: column; }
-            main { margin-left: 0; padding: 1.5rem; }
+            main { margin-left: 0; padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-<nav id="sidebar">
-    <h1>MathLab 📐</h1>
-    <div class="menu-item active" onclick="loadContent('pitagoras', this)">Teorema de Pitágoras</div>
-    <div class="menu-item" onclick="loadContent('gauss', this)">Soma de Gauss</div>
-    <div class="menu-item" onclick="loadContent('trigo', this)">Identidade Fundamental</div>
-    <div class="menu-item" onclick="loadContent('primos', this)">Infinitude dos Primos</div>
-    <div class="menu-item" onclick="loadContent('geometrica', this)">Série Geométrica</div>
-    <div class="menu-item" onclick="loadContent('newton', this)">Binômio de Newton</div>
-    <div class="menu-item" onclick="loadContent('euler', this)">Identidade de Euler</div>
+<nav>
+    <div class="logo">PRINCIPIA MATH</div>
+    <div class="menu-item active" onclick="updateView('pitagoras', this)">Teorema de Pitágoras</div>
+    <div class="menu-item" onclick="updateView('gauss', this)">Soma de Gauss</div>
+    <div class="menu-item" onclick="updateView('trigo', this)">Identidade Trigonométrica</div>
+    <div class="menu-item" onclick="updateView('geometrica', this)">Série Geométrica</div>
+    <div class="menu-item" onclick="updateView('euler', this)">Identidade de Euler</div>
 </nav>
 
-<main id="content">
+<main id="app">
     </main>
 
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
 <script>
-    const demonstrations = {
+    const content = {
         pitagoras: {
-            title: "Teorema de Pitágoras",
+            title: "O Teorema de Pitágoras",
             steps: [
-                { t: "O Enunciado", c: "Em qualquer triângulo retângulo, o quadrado da hipotenusa é igual à soma dos quadrados dos catetos: $$a^2 + b^2 = c^2$$" },
-                { t: "Construção", c: "Imagine um quadrado maior de lado $(a+b)$. Dentro dele, posicionamos 4 triângulos retângulos iguais." },
-                { t: "Áreas", c: "A área do quadrado maior pode ser vista de duas formas: $$(a+b)^2 = 4 \cdot \left(\frac{ab}{2}\right) + c^2$$" },
-                { t: "Simplificação", c: "Expandindo o binômio: $a^2 + 2ab + b^2 = 2ab + c^2$. Cancelando $2ab$, chegamos a: $$a^2 + b^2 = c^2$$" }
+                {
+                    label: "I. Definição Formal",
+                    text: "Seja um triângulo retângulo com catetos $a$ e $b$ e hipotenusa $c$. Provaremos que a área do quadrado construído sobre a hipotenusa é a soma das áreas dos quadrados construídos sobre os catetos.",
+                    math: "a^2 + b^2 = c^2"
+                },
+                {
+                    label: "II. Construção Geométrica",
+                    text: "Considere um quadrado de lado $(a + b)$. Podemos dividir sua área em quatro triângulos retângulos congruentes e um quadrado central de lado $c$.",
+                    math: "A_{total} = (a + b)^2"
+                },
+                {
+                    label: "III. Expansão e Igualdade",
+                    text: "A área total também é a soma das áreas das partes: quatro triângulos de área $\\frac{ab}{2}$ e o quadrado central $c^2$.",
+                    math: "(a + b)^2 = 4 \\left( \\frac{ab}{2} \\right) + c^2"
+                },
+                {
+                    label: "IV. Conclusão Algébrica",
+                    text: "Expandindo o binômio e simplificando os termos idênticos de ambos os lados:",
+                    math: "a^2 + 2ab + b^2 = 2ab + c^2 \\implies a^2 + b^2 = c^2"
+                }
             ]
         },
         gauss: {
-            title: "Soma de Gauss (P.A.)",
+            title: "A Soma de uma P.A. (Gauss)",
             steps: [
-                { t: "O Desafio", c: "Somar os números de 1 a $n$: $$S_n = 1 + 2 + 3 + ... + n$$" },
-                { t: "O Truque", c: "Escreva a soma duas vezes, uma delas em ordem inversa: $$S_n = 1 + 2 + ... + n$$ $$S_n = n + (n-1) + ... + 1$$" },
-                { t: "Soma das Colunas", c: "Observe que cada par vertical soma $(n+1)$. Como temos $n$ colunas: $$2S_n = n(n + 1)$$" },
-                { t: "Resultado", c: "Dividindo por 2, obtemos a fórmula clássica: $$S_n = \frac{n(n+1)}{2}$$" }
-            ]
-        },
-        trigo: {
-            title: "Identidade Trigonométrica Fundamental",
-            steps: [
-                { t: "Círculo Unitário", c: "Considere um círculo de raio $r=1$ no plano cartesiano." },
-                { t: "Coordenadas", c: "Para qualquer ponto no círculo com ângulo $\theta$, temos $x = \cos(\theta)$ e $y = \sin(\theta)$." },
-                { t: "Aplicação", c: "Como a distância do ponto à origem é 1, pelo Teorema de Pitágoras ($x^2 + y^2 = r^2$): $$\cos^2(\theta) + \sin^2(\theta) = 1$$" }
-            ]
-        },
-        primos: {
-            title: "Infinitude dos Primos (Euclides)",
-            steps: [
-                { t: "Suposição", c: "Suponha que existe uma lista finita de todos os números primos: $P = \{p_1, p_2, ..., p_n\}$." },
-                { t: "Construção de N", c: "Crie um novo número $N$ multiplicando todos os primos e somando 1: $$N = (p_1 \cdot p_2 \cdot ... \cdot p_n) + 1$$" },
-                { t: "O Dilema", c: "Se dividirmos $N$ por qualquer primo da nossa lista, o resto será sempre 1." },
-                { t: "Conclusão", c: "Portanto, ou $N$ é um novo primo ou possui um divisor primo que não está na nossa lista. Isso prova que o conjunto dos primos não pode ser finito." }
-            ]
-        },
-        geometrica: {
-            title: "Soma da Série Geométrica",
-            steps: [
-                { t: "Definição", c: "Seja $S$ a soma infinita: $$S = 1 + r + r^2 + r^3 + ...$$ onde $|r| < 1$." },
-                { t: "O Truque Algébrico", c: "Multiplique toda a equação por $r$: $$rS = r + r^2 + r^3 + r^4 + ...$$" },
-                { t: "Subtração", c: "Subtraia $rS$ de $S$: $$S - rS = 1$$" },
-                { t: "Resultado", c: "Fatorando $S(1-r) = 1$, temos: $$S = \frac{1}{1-r}$$" }
-            ]
-        },
-        newton: {
-            title: "Binômio de Newton",
-            steps: [
-                { t: "Expansão", c: "A fórmula descreve a potência de uma soma: $$(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k}b^k$$" },
-                { t: "Coeficiente Binomial", c: "Onde o termo $\binom{n}{k}$ representa as combinações e é calculado por: $$\frac{n!}{k!(n-k)!}$$" }
+                {
+                    label: "I. O Problema",
+                    text: "Desejamos encontrar a soma $S$ dos primeiros $n$ números naturais:",
+                    math: "S_n = 1 + 2 + 3 + \dots + (n-1) + n"
+                },
+                {
+                    label: "II. O Método da Inversão",
+                    text: "Escrevemos a soma em ordem crescente e, logo abaixo, em ordem decrescente:",
+                    math: "\\begin{aligned} S_n &= 1 + 2 + \dots + n \\\\ S_n &= n + (n-1) + \dots + 1 \\end{aligned}"
+                },
+                {
+                    label: "III. Soma Vertical",
+                    text: "Somando as duas equações termo a termo, observamos que cada par resulta em $(n+1)$. Como existem $n$ termos:",
+                    math: "2S_n = (n+1) + (n+1) + \dots + (n+1) = n(n+1)"
+                },
+                {
+                    label: "IV. Resultado Final",
+                    text: "Isolando $S_n$, obtemos a fórmula geral para a soma de uma progressão aritmética simples:",
+                    math: "S_n = \\frac{n(n+1)}{2}"
+                }
             ]
         },
         euler: {
             title: "A Identidade de Euler",
             steps: [
-                { t: "Fórmula Geral", c: "A identidade deriva da fórmula de Euler para análise complexa: $$e^{ix} = \cos(x) + i\sin(x)$$" },
-                { t: "Caso Especial", c: "Se substituirmos $x$ por $\pi$ radianos: $$e^{i\pi} = \cos(\pi) + i\sin(\pi)$$" },
-                { t: "Valores", c: "Sabemos que $\cos(\pi) = -1$ e $\sin(\pi) = 0$. Logo: $$e^{i\pi} = -1 + 0i$$" },
-                { t: "A Elegância", c: "Reorganizando, obtemos a fórmula que une os 5 números mais importantes da matemática: $$e^{i\pi} + 1 = 0$$" }
+                {
+                    label: "I. Expansão em Série de Taylor",
+                    text: "A função exponencial complexa $e^z$ pode ser definida pela sua série de potências infinita:",
+                    math: "e^z = \sum_{n=0}^{\infty} \frac{z^n}{n!}"
+                },
+                {
+                    label: "II. Substituição Imaginária",
+                    text: "Substituindo $z$ por $ix$, onde $i = \sqrt{-1}$, e separando os termos reais dos imaginários, obtemos as séries de $\cos(x)$ e $\sin(x)$:",
+                    math: "e^{ix} = \cos(x) + i\sin(x)"
+                },
+                {
+                    label: "III. O Ponto Crítico",
+                    text: "Avaliando a função no ponto $x = \pi$ radianos:",
+                    math: "e^{i\pi} = \cos(\pi) + i\sin(\pi)"
+                },
+                {
+                    label: "IV. A Elegância Final",
+                    text: "Como $\cos(\pi) = -1$ e $\sin(\pi) = 0$, a expressão se reduz a uma das mais belas identidades da matemática:",
+                    math: "e^{i\pi} + 1 = 0"
+                }
+            ]
+        },
+        trigo: {
+            title: "Identidade Fundamental",
+            steps: [
+                {
+                    label: "I. O Círculo Trigonométrico",
+                    text: "Em um círculo de raio unitário ($R=1$), qualquer ponto $P(x,y)$ sobre a circunferência satisfaz a equação da distância à origem:",
+                    math: "x^2 + y^2 = 1^2"
+                },
+                {
+                    label: "II. Definição de Seno e Cosseno",
+                    text: "Por definição, as coordenadas horizontal e vertical são, respectivamente:",
+                    math: "x = \cos(\theta), \quad y = \sin(\theta)"
+                },
+                {
+                    label: "III. Substituição",
+                    text: "Substituindo estas definições na equação do círculo, temos a identidade que relaciona as funções trigonométricas:",
+                    math: "\sin^2(\theta) + \cos^2(\theta) = 1"
+                }
+            ]
+        },
+        geometrica: {
+            title: "Soma da Série Geométrica",
+            steps: [
+                {
+                    label: "I. Definição da Soma Parcial",
+                    text: "Seja $S_n$ a soma dos primeiros $n$ termos de uma progressão geométrica de razão $r$:",
+                    math: "S_n = 1 + r + r^2 + \dots + r^{n-1}"
+                },
+                {
+                    label: "II. A Diferença Estrutural",
+                    text: "Multiplicamos a soma pela razão $r$ e subtraímos o resultado da soma original para cancelar os termos intermediários:",
+                    math: "S_n - rS_n = (1 + r + \dots + r^{n-1}) - (r + r^2 + \dots + r^n)"
+                },
+                {
+                    label: "III. Simplificação",
+                    text: "Restam apenas o primeiro termo da primeira série e o último da segunda:",
+                    math: "S_n(1 - r) = 1 - r^n"
+                },
+                {
+                    label: "IV. O Limite Infinito",
+                    text: "Se $|r| < 1$, então conforme $n \to \infty$, o termo $r^n \to 0$. Assim, a soma infinita converge para:",
+                    math: "S = \frac{1}{1-r}"
+                }
             ]
         }
     };
 
-    function loadContent(key, element) {
-        // Atualizar menu
-        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
+    function updateView(key, el) {
+        // Update menu UI
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        el.classList.add('active');
 
-        // Gerar HTML
-        const data = demonstrations[key];
-        let html = `<h2>${data.title}</h2><br>`;
+        const data = content[key];
+        const main = document.getElementById('app');
         
-        data.steps.forEach(step => {
+        let html = `<h2>${data.title}</h2><div class="step-container">`;
+        
+        data.steps.forEach((step, index) => {
             html += `
-                <div class="step-box">
-                    <div class="step-title">${step.t}</div>
-                    <div class="step-content">${step.c}</div>
+                <div class="step" style="animation-delay: ${index * 0.1}s">
+                    <span class="step-label">${step.label}</span>
+                    <p class="step-text">${step.text}</p>
+                    <div class="math-box">
+                        $${step.math}$$
+                    </div>
                 </div>
             `;
         });
+        
+        html += `</div>`;
+        main.innerHTML = html;
 
-        const contentDiv = document.getElementById('content');
-        contentDiv.innerHTML = html;
-
-        // Renderizar fórmulas novas
-        renderMathInElement(contentDiv, {
-            delimiters: [
-                {left: '$$', right: '$$', display: true},
-                {left: '$', right: '$', display: false}
-            ]
-        });
+        // Render KaTeX com tratamento de erro
+        if (window.renderMathInElement) {
+            renderMathInElement(main, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
     }
 
-    // Carregar inicial
-    window.onload = () => {
-        loadContent('pitagoras', document.querySelector('.menu-item'));
-    };
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            updateView('pitagoras', document.querySelector('.menu-item'));
+        }, 500);
+    });
 </script>
 
 </body>
