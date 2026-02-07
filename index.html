@@ -1,534 +1,178 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fórmulas Famosas — Provas Didáticas</title>
-
-  <!-- KaTeX (CDN) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-
-  <style>
-    :root{
-      --bg:#0b1020;
-      --panel:rgba(255,255,255,.06);
-      --border:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
-      --accent:#7c3aed;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    }
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(1000px 500px at 20% 10%, rgba(124,58,237,.25), transparent 60%),
-        radial-gradient(900px 600px at 80% 0%, rgba(34,197,94,.16), transparent 55%),
-        radial-gradient(900px 600px at 50% 90%, rgba(56,189,248,.10), transparent 60%),
-        var(--bg);
-    }
-    .container{ max-width:1200px; margin:0 auto; padding:22px; }
-    .topbar{
-      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
-      margin-bottom:16px;
-    }
-    .title h1{ margin:0; font-size:18px; letter-spacing:.2px; }
-    .title p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
-    .pill{
-      font-size:12px; padding:7px 10px; border-radius:999px;
-      border:1px solid var(--border); background:rgba(255,255,255,.05); color:var(--muted);
-      white-space:nowrap;
-    }
-    .shell{ display:grid; grid-template-columns:340px 1fr; gap:18px; align-items:start; }
-    @media (max-width:960px){ .shell{ grid-template-columns:1fr; } }
-
-    .card{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .cardHeader{
-      padding:16px 16px 12px;
-      border-bottom:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), transparent);
-    }
-    .cardHeader h2{ margin:0; font-size:14px; letter-spacing:.2px; }
-    .searchRow{ margin-top:12px; display:flex; gap:10px; }
-    .input{
-      width:100%;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.18);
-      outline:none;
-      color:var(--text);
-    }
-    .input::placeholder{ color:rgba(255,255,255,.45); }
-    .input:focus{ border-color:rgba(124,58,237,.55); box-shadow:0 0 0 4px rgba(124,58,237,.18); }
-    .btn{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.06);
-      cursor:pointer;
-      color:var(--text);
-    }
-    .btn:hover{ background:rgba(255,255,255,.08); }
-
-    .list{ max-height:calc(100vh - 250px); overflow:auto; padding:10px; }
-    .item{
-      display:flex; flex-direction:column; gap:6px;
-      padding:12px; border-radius:14px;
-      border:1px solid transparent;
-      cursor:pointer;
-    }
-    .item:hover{ background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.08); }
-    .item.active{ background:rgba(124,58,237,.14); border-color:rgba(124,58,237,.35); }
-    .itemTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .itemName{ margin:0; font-size:14px; font-weight:650; }
-    .tag{
-      font-size:11px; padding:4px 8px; border-radius:999px;
-      background:rgba(0,0,0,.20); border:1px solid var(--border);
-      color:var(--muted);
-    }
-    .itemFormula{ font-family:var(--mono); font-size:12px; color:var(--muted); }
-
-    .content{ padding:18px 18px 22px; }
-    .hero h3{ margin:0 0 6px; font-size:18px; }
-    .subtitle{ margin:0; color:var(--muted); font-size:14px; line-height:1.5; }
-    .pillRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    hr{ border:0; border-top:1px solid var(--border); margin:16px 0; }
-    .kicker{ font-size:12px; color:rgba(255,255,255,.78); margin:0 0 10px 0; }
-    .md{ line-height:1.75; font-size:15px; color:rgba(255,255,255,.88); }
-    .md h4{ margin:18px 0 8px; font-size:16px; color:rgba(255,255,255,.94); }
-    .md p{ margin:10px 0; }
-    .md ul{ margin:10px 0 10px 18px; }
-    .md code{
-      font-family:var(--mono);
-      font-size:13px;
-      background:rgba(0,0,0,.20);
-      padding:2px 6px;
-      border-radius:8px;
-      border:1px solid var(--border);
-    }
-    .footer{
-      color:var(--muted);
-      font-size:12px;
-      padding:14px 18px 18px;
-      border-top:1px solid var(--border);
-    }
-    a{ color:#b9a6ff; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórmulas Famosas - Provas Passo a Passo</title>
+    <!-- KaTeX para renderizar fórmulas matemáticas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha384-wcIxkf4k558Ajq/4EaSnOdeZq8gT7c8+U3kE838supLYJ1k5iCXVwM936jTOcnTr" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" integrity="sha384-hIoBPJpTUs74ddyc4l8f2jHKwZit/VWeSWHPNxnRm8bfPhc8vvbD039en/qtXvUM" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVWFw7Q/zA2szetkMhFZh1NUCQwrNZn06JnvWg6yBD1GdxNTBgchvEEk" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        #menu { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .formula-card { border: 1px solid #ccc; padding: 10px; margin: 10px; width: 300px; cursor: pointer; }
+        .formula-card:hover { background-color: #f0f0f0; }
+        #prova { margin-top: 20px; border: 1px solid #ddd; padding: 15px; display: none; }
+        #prova h2 { margin-top: 0; }
+        ol { padding-left: 20px; }
+        .katex { font-size: 1.2em; }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="topbar">
-      <div class="title">
-        <h1>📘 Fórmulas famosas — provas passo a passo</h1>
-        <p>Ensino médio e pré-cálculo. Selecione uma fórmula e veja a demonstração didática.</p>
-      </div>
-      <span class="pill" id="countPill">0 itens</span>
+    <h1>Fórmulas Famosas — Provas Passo a Passo</h1>
+    <p>Ensino médio e pré-cálculo. Selecione uma fórmula e veja a demonstração didática.</p>
+    <div id="menu"></div>
+    <div id="prova">
+        <h2 id="nome"></h2>
+        <p><strong>Fórmula:</strong> <span id="formula"></span></p>
+        <p><strong>Área:</strong> <span id="area"></span></p>
+        <p><strong>Dica de Uso:</strong> <span id="dica"></span></p>
+        <h3>Prova Passo a Passo:</h3>
+        <ol id="passos"></ol>
+        <button onclick="voltarMenu()">Voltar ao Menu</button>
     </div>
 
-    <div class="shell">
-      <!-- MENU -->
-      <div class="card">
-        <div class="cardHeader">
-          <h2>Menu</h2>
-          <div class="searchRow">
-            <input id="search" class="input" placeholder="Buscar (ex.: trigonometria, Gauss, primos)" />
-            <button id="clear" class="btn" title="Limpar">✕</button>
-          </div>
-        </div>
-        <div id="list" class="list"></div>
-      </div>
+    <script>
+        // Array de fórmulas - edite aqui para adicionar novas
+        const FORMULAS = [
+            {
+                id: 1,
+                nome: "Fórmula de Bhaskara",
+                formula: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
+                area: "Álgebra / Funções Quadráticas",
+                dicaUso: "Resolve equações do 2º grau ax² + bx + c = 0",
+                provaPassoAPasso: [
+                    "Partimos da equação: ax² + bx + c = 0",
+                    "Isolamos o termo em x²: x² + (b/a)x + c/a = 0",
+                    "Completamos o quadrado: x² + (b/a)x + (b/(2a))² = (b/(2a))² - c/a",
+                    "(x + b/(2a))² = (b²/(4a²)) - (c/a)",
+                    "(x + b/(2a))² = (b² - 4ac)/(4a²)",
+                    "x + b/(2a) = ± √(b² - 4ac)/(2a)",
+                    "x = -b/(2a) ± √(b² - 4ac)/(2a)",
+                    "Portanto: x = [-b ± √(Δ)] / (2a) onde Δ = b² - 4ac"
+                ]
+            },
+            {
+                id: 2,
+                nome: "Teorema de Pitágoras",
+                formula: "a^2 + b^2 = c^2",
+                area: "Geometria Plana",
+                dicaUso: "Triângulos retângulos – relação entre catetos e hipotenusa",
+                provaPassoAPasso: [
+                    "Considere um triângulo retângulo com catetos a, b e hipotenusa c.",
+                    "Construa quadrados nos três lados: área do quadrado da hipotenusa = c²",
+                    "Área dos quadrados dos catetos = a² + b²",
+                    "Desloque os triângulos menores para formar a mesma figura que o quadrado maior (prova visual de van Aubel).",
+                    "Portanto as áreas são iguais → a² + b² = c²"
+                ]
+            },
+            {
+                id: 3,
+                nome: "Soma dos ângulos internos de um polígono",
+                formula: "S = (n-2) \\cdot 180^\\circ",
+                area: "Geometria Plana",
+                dicaUso: "n = número de lados",
+                provaPassoAPasso: [
+                    "Um polígono de n lados pode ser dividido em n-2 triângulos.",
+                    "Cada triângulo tem soma de ângulos internos = 180°.",
+                    "Portanto, soma total = (n-2) × 180°."
+                ]
+            },
+            {
+                id: 4,
+                nome: "Produtos notáveis – Quadrado da soma",
+                formula: "(a + b)^2 = a^2 + 2ab + b^2",
+                area: "Álgebra",
+                dicaUso: "Base para fatoração e expansão",
+                provaPassoAPasso: [
+                    "(a + b)² = (a + b)(a + b)",
+                    "= a(a + b) + b(a + b)",
+                    "= a² + ab + ba + b²",
+                    "= a² + 2ab + b² (pois ab = ba)"
+                ]
+            },
+            {
+                id: 5,
+                nome: "Soma dos termos de uma PA",
+                formula: "S_n = \\frac{n}{2} (a_1 + a_n) \\quad ou \\quad S_n = \\frac{n}{2} [2a_1 + (n-1)d]",
+                area: "Progressões",
+                dicaUso: "Progressão Aritmética",
+                provaPassoAPasso: [
+                    "Escreva a soma: S = a₁ + (a₁+d) + (a₁+2d) + ... + (a₁+(n-1)d)",
+                    "Escreva ao contrário: S = (a₁+(n-1)d) + ... + (a₁+d) + a₁",
+                    "Some as duas expressões: 2S = n(a₁ + a₁ + (n-1)d)",
+                    "2S = n(2a₁ + (n-1)d)",
+                    "S = n/2 [2a₁ + (n-1)d]"
+                ]
+            },
+            {
+                id: 6,
+                nome: "Lei dos Senos",
+                formula: "\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R",
+                area: "Trigonometria",
+                dicaUso: "Relação entre lados e ângulos opostos em qualquer triângulo",
+                provaPassoAPasso: [
+                    "Considere um triângulo ABC com lados a, b, c opostos aos ângulos A, B, C.",
+                    "A área do triângulo pode ser expressa como (1/2)bc sen A = (1/2)ac sen B = (1/2)ab sen C.",
+                    "Portanto, bc sen A = ac sen B = ab sen C.",
+                    "Dividindo por abc: (sen A)/a = (sen B)/b = (sen C)/c.",
+                    "Invertendo: a/sen A = b/sen B = c/sen C.",
+                    "Esse valor comum é igual a 2R, onde R é o raio da circunferência circunscrita (prova via fórmula estendida)."
+                ]
+            },
+            // Adicione mais fórmulas aqui conforme necessário
+        ];
 
-      <!-- CONTEÚDO -->
-      <div class="card">
-        <div class="cardHeader">
-          <h2>Prova</h2>
-        </div>
-        <div class="content">
-          <div class="hero">
-            <h3 id="title">—</h3>
-            <p class="subtitle" id="subtitle">—</p>
-            <div class="pillRow" id="meta"></div>
-          </div>
+        // Função para popular o menu
+        function popularMenu() {
+            const menu = document.getElementById('menu');
+            menu.innerHTML = ''; // Limpa
+            FORMULAS.forEach(formula => {
+                const card = document.createElement('div');
+                card.className = 'formula-card';
+                card.innerHTML = `<h3>${formula.nome}</h3><p>${formula.area}</p>`;
+                card.onclick = () => mostrarProva(formula);
+                menu.appendChild(card);
+            });
+            document.getElementById('prova').style.display = 'none';
+        }
 
-          <p class="kicker"><strong>Fórmula:</strong> <span id="formula" style="font-family:var(--mono)"></span></p>
+        // Função para mostrar a prova
+        function mostrarProva(formula) {
+            document.getElementById('nome').textContent = formula.nome;
+            document.getElementById('area').textContent = formula.area;
+            document.getElementById('dica').textContent = formula.dicaUso;
 
-          <hr />
+            // Renderizar fórmula com KaTeX
+            const formulaElem = document.getElementById('formula');
+            katex.render(formula.formula, formulaElem, { throwOnError: false });
 
-          <div class="md" id="body"></div>
-        </div>
-        <div class="footer">
-          Dica: para adicionar novas fórmulas, edite o array <code>FORMULAS</code> no final do arquivo.
-        </div>
-      </div>
-    </div>
-  </div>
+            // Popular passos
+            const passos = document.getElementById('passos');
+            passos.innerHTML = '';
+            formula.provaPassoAPasso.forEach(passo => {
+                const li = document.createElement('li');
+                li.textContent = passo;
+                // Renderizar math dentro dos passos se necessário (adapte se houver fórmulas nos passos)
+                renderMathInElement(li);
+                passos.appendChild(li);
+            });
 
-  <script>
-    // ====== DADOS (adicione mais fórmulas aqui) ======
-    const FORMULAS = [
-      {
-        id: "pitagoras",
-        nome: "Teorema de Pitágoras",
-        tag: "Geometria",
-        nivel: "Ensino médio",
-        tempo: "8–12 min",
-        formulaTex: "a^2 + b^2 = c^2",
-        resumo: "Relação fundamental em triângulos retângulos. Prova visual por áreas.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar que, num triângulo retângulo, com catetos <span class="math">a</span>, <span class="math">b</span> e hipotenusa <span class="math">c</span>, vale:</p>
-          <p class="math-block">a^2+b^2=c^2</p>
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('prova').style.display = 'block';
+        }
 
-          <h4>Prova por áreas (passo a passo)</h4>
-          <p>Considere um quadrado de lado <span class="math">a+b</span>. A área total é:</p>
-          <p class="math-block">(a+b)^2</p>
+        // Função para voltar ao menu
+        function voltarMenu() {
+            document.getElementById('menu').style.display = 'flex';
+            document.getElementById('prova').style.display = 'none';
+        }
 
-          <p>Agora coloque dentro dele <strong>4</strong> triângulos retângulos iguais (com catetos <span class="math">a</span> e <span class="math">b</span>).</p>
-          <p>A área de cada triângulo é:</p>
-          <p class="math-block">\\frac{ab}{2}</p>
-
-          <p>Então a área dos 4 triângulos é:</p>
-          <p class="math-block">4\\cdot\\frac{ab}{2}=2ab</p>
-
-          <p>O espaço que sobra no centro é um quadrado de lado <span class="math">c</span>, então sua área é:</p>
-          <p class="math-block">c^2</p>
-
-          <p>Como a área total do quadrado grande é a soma das partes:</p>
-          <p class="math-block">(a+b)^2 = 2ab + c^2</p>
-
-          <p>Expandindo o lado esquerdo:</p>
-          <p class="math-block">a^2 + 2ab + b^2 = 2ab + c^2</p>
-
-          <p>Cancelando <span class="math">2ab</span> em ambos os lados:</p>
-          <p class="math-block">a^2 + b^2 = c^2</p>
-
-          <p><strong>Concluímos</strong> que o Teorema de Pitágoras está provado. ✅</p>
-        `
-      },
-
-      {
-        id: "soma-naturais",
-        nome: "Soma dos n primeiros naturais (Gauss)",
-        tag: "Álgebra",
-        nivel: "Ensino médio",
-        tempo: "3–6 min",
-        formulaTex: "1+2+\\cdots+n=\\frac{n(n+1)}{2}",
-        resumo: "Prova clássica por pareamento: simples e elegante.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar:</p>
-          <p class="math-block">1+2+\\cdots+n=\\frac{n(n+1)}{2}</p>
-
-          <h4>Passo 1 — Defina a soma</h4>
-          <p class="math-block">S=1+2+\\cdots+n</p>
-
-          <h4>Passo 2 — Escreva ao contrário</h4>
-          <p class="math-block">S=n+(n-1)+\\cdots+1</p>
-
-          <h4>Passo 3 — Some termo a termo</h4>
-          <p>Somando as duas expressões:</p>
-          <p class="math-block">2S=(1+n)+(2+(n-1))+\\cdots+(n+1)</p>
-          <p>Cada par vale <span class="math">n+1</span>.</p>
-
-          <h4>Passo 4 — Conte quantos pares</h4>
-          <p>Há <span class="math">n</span> termos, então existem <span class="math">n</span> pares:</p>
-          <p class="math-block">2S=n(n+1)</p>
-
-          <h4>Passo 5 — Divida por 2</h4>
-          <p class="math-block">S=\\frac{n(n+1)}{2}</p>
-
-          <p>✅ Provado.</p>
-        `
-      },
-
-      {
-        id: "serie-geometrica",
-        nome: "Série geométrica infinita",
-        tag: "Pré-cálculo",
-        nivel: "Pré-cálculo",
-        tempo: "7–12 min",
-        formulaTex: "1+r+r^2+\\cdots=\\frac{1}{1-r}\\ (|r|<1)",
-        resumo: "Soma parcial + limite. Base para muitos resultados em matemática.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Para <span class="math">|r|&lt;1</span>, provar:</p>
-          <p class="math-block">1+r+r^2+r^3+\\cdots=\\frac{1}{1-r}</p>
-
-          <h4>Passo 1 — Soma parcial</h4>
-          <p class="math-block">S_n=1+r+r^2+\\cdots+r^n</p>
-
-          <h4>Passo 2 — Multiplique por r</h4>
-          <p class="math-block">rS_n=r+r^2+\\cdots+r^{n+1}</p>
-
-          <h4>Passo 3 — Subtraia</h4>
-          <p>Subtraindo:</p>
-          <p class="math-block">S_n-rS_n=1-r^{n+1}</p>
-          <p>Fatorando:</p>
-          <p class="math-block">S_n(1-r)=1-r^{n+1}</p>
-          <p>Logo:</p>
-          <p class="math-block">S_n=\\frac{1-r^{n+1}}{1-r}</p>
-
-          <h4>Passo 4 — Limite</h4>
-          <p>Se <span class="math">|r|&lt;1</span>, então <span class="math">r^{n+1}\\to 0</span> quando <span class="math">n\\to\\infty</span>.</p>
-          <p>Assim:</p>
-          <p class="math-block">\\lim_{n\\to\\infty}S_n=\\frac{1}{1-r}</p>
-
-          <p>✅ Provado.</p>
-        `
-      },
-
-      {
-        id: "seno-cos",
-        nome: "Identidade fundamental",
-        tag: "Trigonometria",
-        nivel: "Ensino médio",
-        tempo: "5–8 min",
-        formulaTex: "\\sin^2\\theta+\\cos^2\\theta=1",
-        resumo: "Vem do círculo unitário e do Teorema de Pitágoras.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar:</p>
-          <p class="math-block">\\sin^2\\theta+\\cos^2\\theta=1</p>
-
-          <h4>Passo 1 — Círculo unitário</h4>
-          <p>No círculo de raio 1, o ponto do ângulo <span class="math">\\theta</span> tem coordenadas:</p>
-          <p class="math-block">(\\cos\\theta,\\ \\sin\\theta)</p>
-
-          <h4>Passo 2 — Distância até a origem</h4>
-          <p>A distância do ponto até a origem é o raio, isto é, 1.</p>
-
-          <h4>Passo 3 — Aplique Pitágoras</h4>
-          <p>Pelo Teorema de Pitágoras:</p>
-          <p class="math-block">(\\cos\\theta)^2 + (\\sin\\theta)^2 = 1^2</p>
-          <p>Logo:</p>
-          <p class="math-block">\\sin^2\\theta+\\cos^2\\theta=1</p>
-
-          <p>✅ Provado.</p>
-        `
-      },
-
-      {
-        id: "infinitos-primos",
-        nome: "Infinitude dos primos (Euclides)",
-        tag: "Números",
-        nivel: "Ensino médio",
-        tempo: "6–10 min",
-        formulaTex: "\\text{Existem infinitos primos}",
-        resumo: "Prova clássica curta e brilhante por contradição.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar que existem infinitos números primos.</p>
-
-          <h4>Passo 1 — Suponha o contrário</h4>
-          <p>Suponha que exista uma lista completa de primos:</p>
-          <p class="math-block">p_1,p_2,\\ldots,p_n</p>
-
-          <h4>Passo 2 — Construa um número novo</h4>
-          <p>Considere:</p>
-          <p class="math-block">N=p_1p_2\\cdots p_n+1</p>
-
-          <h4>Passo 3 — Veja o resto da divisão</h4>
-          <p>Se dividirmos <span class="math">N</span> por qualquer <span class="math">p_k</span> da lista, sobra resto 1:</p>
-          <p class="math-block">N\\equiv 1\\pmod{p_k}</p>
-          <p>Então nenhum <span class="math">p_k</span> divide <span class="math">N</span>.</p>
-
-          <h4>Passo 4 — Contradição</h4>
-          <p>Assim, ou <span class="math">N</span> é primo (novo primo) ou tem um fator primo fora da lista.</p>
-          <p>Isso contradiz a ideia de que a lista era completa.</p>
-
-          <p>✅ Logo, existem infinitos primos.</p>
-        `
-      },
-
-      {
-        id: "binomio-newton",
-        nome: "Binômio de Newton",
-        tag: "Combinatória",
-        nivel: "Ensino médio",
-        tempo: "10–15 min",
-        formulaTex: "(a+b)^n=\\sum_{k=0}^{n}\\binom{n}{k}a^{n-k}b^k",
-        resumo: "Demonstração por contagem: de onde vem o coeficiente binomial.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar:</p>
-          <p class="math-block">(a+b)^n=\\sum_{k=0}^{n}\\binom{n}{k}a^{n-k}b^k</p>
-
-          <h4>Passo 1 — Veja como produto</h4>
-          <p class="math-block">(a+b)^n=\\underbrace{(a+b)(a+b)\\cdots(a+b)}_{n\\text{ fatores}}</p>
-
-          <h4>Passo 2 — Como aparece a^{n-k}b^k?</h4>
-          <p>Em cada parêntese escolhemos <span class="math">a</span> ou <span class="math">b</span>.</p>
-          <p>Para obter <span class="math">a^{n-k}b^k</span>, escolhemos <span class="math">b</span> em exatamente <span class="math">k</span> fatores.</p>
-
-          <h4>Passo 3 — Quantas escolhas?</h4>
-          <p>O número de maneiras de escolher quais <span class="math">k</span> posições terão <span class="math">b</span> é:</p>
-          <p class="math-block">\\binom{n}{k}</p>
-
-          <h4>Passo 4 — Some todos os casos</h4>
-          <p>Somando para <span class="math">k=0</span> até <span class="math">n</span>, obtemos a fórmula.</p>
-
-          <p>✅ Provado.</p>
-        `
-      },
-
-      {
-        id: "euler",
-        nome: "Fórmula de Euler (bônus)",
-        tag: "Bônus",
-        nivel: "Pré-cálculo (avançado)",
-        tempo: "12–18 min",
-        formulaTex: "e^{i\\theta}=\\cos\\theta+i\\sin\\theta",
-        resumo: "Ponte entre exponenciais e trigonometria via séries de Taylor.",
-        html: `
-          <h4>Objetivo</h4>
-          <p>Provar:</p>
-          <p class="math-block">e^{i\\theta}=\\cos\\theta+i\\sin\\theta</p>
-
-          <h4>Passo 1 — Série de Taylor do exponencial</h4>
-          <p>Sabemos que:</p>
-          <p class="math-block">e^x=\\sum_{n=0}^{\\infty}\\frac{x^n}{n!}</p>
-          <p>Substituindo <span class="math">x=i\\theta</span>:</p>
-          <p class="math-block">e^{i\\theta}=\\sum_{n=0}^{\\infty}\\frac{(i\\theta)^n}{n!}
-          =\\sum_{n=0}^{\\infty}\\frac{i^n\\theta^n}{n!}</p>
-
-          <h4>Passo 2 — Separe pares e ímpares</h4>
-          <p class="math-block">e^{i\\theta}
-          =\\sum_{k=0}^{\\infty}\\frac{i^{2k}\\theta^{2k}}{(2k)!}
-          +\\sum_{k=0}^{\\infty}\\frac{i^{2k+1}\\theta^{2k+1}}{(2k+1)!}</p>
-
-          <h4>Passo 3 — Termos pares viram cos</h4>
-          <p>Como <span class="math">i^{2k}=(i^2)^k=(-1)^k</span>, temos:</p>
-          <p class="math-block">\\sum_{k=0}^{\\infty}(-1)^k\\frac{\\theta^{2k}}{(2k)!}=\\cos\\theta</p>
-
-          <h4>Passo 4 — Termos ímpares viram i·sen</h4>
-          <p>Como <span class="math">i^{2k+1}=i(-1)^k</span>, temos:</p>
-          <p class="math-block">\\sum_{k=0}^{\\infty}\\frac{i^{2k+1}\\theta^{2k+1}}{(2k+1)!}
-          = i\\sum_{k=0}^{\\infty}(-1)^k\\frac{\\theta^{2k+1}}{(2k+1)!}
-          = i\\sin\\theta</p>
-
-          <h4>Conclusão</h4>
-          <p>Somando as partes:</p>
-          <p class="math-block">e^{i\\theta}=\\cos\\theta+i\\sin\\theta</p>
-
-          <p>✅ Provado.</p>
-        `
-      }
-    ];
-    // ====== FIM DOS DADOS ======
-
-    const listEl = document.getElementById("list");
-    const searchEl = document.getElementById("search");
-    const clearEl = document.getElementById("clear");
-
-    const titleEl = document.getElementById("title");
-    const subtitleEl = document.getElementById("subtitle");
-    const formulaEl = document.getElementById("formula");
-    const bodyEl = document.getElementById("body");
-    const metaEl = document.getElementById("meta");
-    const countPill = document.getElementById("countPill");
-
-    let activeId = FORMULAS[0].id;
-
-    function renderList(items){
-      listEl.innerHTML = "";
-      countPill.textContent = `${items.length} itens`;
-      for(const f of items){
-        const div = document.createElement("div");
-        div.className = "item" + (f.id === activeId ? " active" : "");
-        div.innerHTML = `
-          <div class="itemTop">
-            <p class="itemName">${f.nome}</p>
-            <span class="tag">${f.tag}</span>
-          </div>
-          <div class="itemFormula">${escapeHtml(f.formulaTex)}</div>
-        `;
-        div.addEventListener("click", () => {
-          activeId = f.id;
-          renderList(items);
-          renderContent(f);
-        });
-        listEl.appendChild(div);
-      }
-    }
-
-    function renderContent(f){
-      titleEl.textContent = f.nome;
-      subtitleEl.textContent = f.resumo;
-      formulaEl.textContent = f.formulaTex;
-
-      metaEl.innerHTML = `
-        <span class="pill">📚 ${f.nivel}</span>
-        <span class="pill">⏱️ ${f.tempo}</span>
-        <span class="pill">🏷️ ${f.tag}</span>
-      `;
-
-      bodyEl.innerHTML = f.html;
-
-      // Renderizar LaTeX (KaTeX auto-render)
-      if (window.renderMathInElement) {
-        renderMathInElement(bodyEl, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\[", right: "\\]", display: true },
-            { left: "\\(", right: "\\)", display: false },
-            { left: "$", right: "$", display: false }
-          ],
-          throwOnError: false
-        });
-        // Também renderiza spans com class "math" e blocos "math-block"
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\[", right: "\\]", display: true },
-            { left: "\\(", right: "\\)", display: false },
-            { left: "$", right: "$", display: false }
-          ],
-          throwOnError: false
-        });
-      }
-    }
-
-    function escapeHtml(s){
-      return s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-    }
-
-    function applyFilter(){
-      const q = (searchEl.value || "").trim().toLowerCase();
-      const items = !q ? FORMULAS : FORMULAS.filter(f =>
-        f.nome.toLowerCase().includes(q) ||
-        f.tag.toLowerCase().includes(q) ||
-        f.nivel.toLowerCase().includes(q)
-      );
-      // se o ativo saiu do filtro, ativa o primeiro do filtro
-      if (!items.some(x => x.id === activeId) && items.length) activeId = items[0].id;
-      renderList(items);
-      const current = items.find(x => x.id === activeId) || items[0];
-      if (current) renderContent(current);
-    }
-
-    clearEl.addEventListener("click", () => { searchEl.value = ""; applyFilter(); });
-    searchEl.addEventListener("input", applyFilter);
-
-    // Espera KaTeX carregar antes da primeira renderização
-    window.addEventListener("load", () => {
-      applyFilter();
-    });
-  </script>
+        // Inicializar
+        popularMenu();
+    </script>
 </body>
 </html>
