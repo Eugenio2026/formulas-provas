@@ -1,199 +1,196 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fórmulas Famosas — Provas Passo a Passo</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
-        onload="renderMathInElement(document.body);"></script>
+    <title>MathLab - Demonstrações Matemáticas</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; line-height: 1.6; }
-        h1 { text-align: center; color: #222; }
-        #menu { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; }
-        .formula-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 18px;
-            width: 320px;
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --sidebar: #ffffff;
+            --text: #1e293b;
+            --accent: #eff6ff;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+        body { display: flex; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* Sidebar */
+        nav {
+            width: 280px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+
+        h1 { font-size: 1.5rem; margin-bottom: 2rem; color: var(--primary); text-align: center; }
+
+        .menu-item {
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-            transition: all 0.18s;
+            transition: 0.2s;
+            font-weight: 500;
         }
-        .formula-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        #prova {
+
+        .menu-item:hover { background: var(--accent); color: var(--primary); }
+        .menu-item.active { background: var(--primary); color: white; shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+
+        /* Conteúdo Principal */
+        main {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem;
             max-width: 900px;
-            margin: 30px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: none;
         }
-        .katex { font-size: 1.28em !important; }
-        ol { padding-left: 28px; }
-        li { margin-bottom: 12px; }
+
+        .step-box {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .step-title { font-weight: bold; margin-bottom: 0.5rem; color: var(--primary); text-transform: uppercase; font-size: 0.85rem; }
+
+        .formula-display { font-size: 1.25rem; margin: 1rem 0; text-align: center; }
+
+        @media (max-width: 768px) {
+            nav { width: 100%; height: auto; position: relative; border-right: none; }
+            body { flex-direction: column; }
+            main { margin-left: 0; padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Fórmulas Famosas — Provas Passo a Passo</h1>
-    <p style="text-align: center; font-size: 1.1em;">Ensino médio e pré-cálculo — clique em uma fórmula para ver a demonstração completa</p>
+<nav id="sidebar">
+    <h1>MathLab 📐</h1>
+    <div class="menu-item active" onclick="loadContent('pitagoras', this)">Teorema de Pitágoras</div>
+    <div class="menu-item" onclick="loadContent('gauss', this)">Soma de Gauss</div>
+    <div class="menu-item" onclick="loadContent('trigo', this)">Identidade Fundamental</div>
+    <div class="menu-item" onclick="loadContent('primos', this)">Infinitude dos Primos</div>
+    <div class="menu-item" onclick="loadContent('geometrica', this)">Série Geométrica</div>
+    <div class="menu-item" onclick="loadContent('newton', this)">Binômio de Newton</div>
+    <div class="menu-item" onclick="loadContent('euler', this)">Identidade de Euler</div>
+</nav>
 
-    <div id="menu"></div>
+<main id="content">
+    </main>
 
-    <div id="prova">
-        <h2 id="nome"></h2>
-        <p><strong>Fórmula:</strong> <span id="formula"></span></p>
-        <p><strong>Área:</strong> <span id="area"></span></p>
-        <p><strong>Utilização típica:</strong> <span id="dica"></span></p>
-        <h3>Demonstração passo a passo:</h3>
-        <ol id="passos"></ol>
-        <button onclick="voltarMenu()" style="margin-top: 30px; padding: 12px 28px; font-size: 1.1em; cursor: pointer;">← Voltar ao menu</button>
-    </div>
-
-    <script>
-        const FORMULAS = [
-            {
-                nome: "Fórmula de Bhaskara",
-                formula: "x = \\dfrac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
-                area: "Álgebra — Equações do 2º grau",
-                dica: "Resolve ax² + bx + c = 0 (a ≠ 0)",
-                passos: [
-                    "Partimos da equação geral: ax² + bx + c = 0",
-                    "Dividimos todos os termos por a (a ≠ 0): x² + (b/a)x + (c/a) = 0",
-                    "Movemos o termo constante para o outro lado: x² + (b/a)x = -c/a",
-                    "Completamos o quadrado no lado esquerdo: adicionamos (b/(2a))² nos dois lados",
-                    "x² + (b/a)x + (b/(2a))² = -c/a + (b/(2a))²",
-                    "O lado esquerdo é um quadrado perfeito: (x + b/(2a))² = (b²/(4a²)) - (c/a)",
-                    "Colocamos com denominador comum: (x + b/(2a))² = (b² - 4ac)/(4a²)",
-                    "Tiramos a raiz quadrada nos dois lados: x + b/(2a) = ± √(b² - 4ac) / (2a)",
-                    "Isolamos x: x = -b/(2a) ± √(b² - 4ac)/(2a)",
-                    "Escrevemos de forma compacta: x = [-b ± √(Δ)] / (2a), onde Δ = b² - 4ac"
-                ]
-            },
-            {
-                nome: "Teorema de Pitágoras",
-                formula: "a^2 + b^2 = c^2",
-                area: "Geometria Plana — Triângulos retângulos",
-                dica: "Relação entre catetos (a, b) e hipotenusa (c)",
-                passos: [
-                    "Considere um triângulo retângulo com catetos a e b, hipotenusa c.",
-                    "Construímos quadrados nos três lados do triângulo.",
-                    "O quadrado sobre a hipotenusa tem área c².",
-                    "Os quadrados sobre os catetos têm áreas a² e b².",
-                    "Uma demonstração clássica (van Schooten ou rearranjo): dividimos o quadrado maior em regiões que podem ser rearranjadas para formar exatamente os dois quadrados menores.",
-                    "Como as áreas são conservadas no rearranjo, temos: a² + b² = c².",
-                    "(Alternativa via semelhança: a altura relativa à hipotenusa cria dois triângulos menores semelhantes ao original → a/c = b/a e b/c = a/b, multiplicando obtemos a² + b² = c².)"
-                ]
-            },
-            {
-                nome: "Soma dos ângulos internos de um polígono",
-                formula: "S = (n-2) \\times 180^\\circ",
-                area: "Geometria Plana",
-                dica: "n = número de lados do polígono convexo",
-                passos: [
-                    "Qualquer polígono convexo de n lados pode ser dividido em (n-2) triângulos, traçando diagonais a partir de um único vértice.",
-                    "Cada triângulo tem soma de ângulos internos igual a 180°.",
-                    "Portanto, a soma total dos ângulos internos do polígono é o número de triângulos vezes 180°.",
-                    "S = (n - 2) × 180°",
-                    "Exemplo: triângulo (n=3) → (3-2)×180° = 180°",
-                    "Quadrado (n=4) → (4-2)×180° = 360°",
-                    "Pentágono (n=5) → (5-2)×180° = 540°"
-                ]
-            },
-            {
-                nome: "Quadrado da soma (produto notável)",
-                formula: "(a + b)^2 = a^2 + 2ab + b^2",
-                area: "Álgebra — Produtos notáveis",
-                dica: "Base para fatoração e expansão de binômios",
-                passos: [
-                    "Expandimos diretamente: (a + b)² = (a + b)(a + b)",
-                    "Aplicamos a propriedade distributiva: = a·(a + b) + b·(a + b)",
-                    "= a·a + a·b + b·a + b·b",
-                    "= a² + ab + ba + b²",
-                    "Como a multiplicação é comutativa, ab = ba",
-                    "Logo: a² + ab + ab + b² = a² + 2ab + b²",
-                    "Portanto: (a + b)² = a² + 2ab + b²"
-                ]
-            },
-            {
-                nome: "Soma dos termos de uma PA",
-                formula: "S_n = \\dfrac{n}{2} (a_1 + a_n) \\quad \\text{ou} \\quad S_n = \\dfrac{n}{2} [2a_1 + (n-1)d]",
-                area: "Progressão Aritmética",
-                dica: "Soma dos n primeiros termos de PA",
-                passos: [
-                    "Seja S a soma dos n termos: S = a₁ + (a₁ + d) + (a₁ + 2d) + ... + (a₁ + (n-1)d)",
-                    "Escrevemos a mesma soma em ordem inversa: S = (a₁ + (n-1)d) + ... + (a₁ + d) + a₁",
-                    "Somamos as duas expressões termo a termo: 2S = [a₁ + a₁ + (n-1)d] + [(a₁ + d) + (a₁ + (n-2)d)] + ...",
-                    "Cada par soma 2a₁ + (n-1)d, e há n pares",
-                    "Portanto: 2S = n [2a₁ + (n-1)d]",
-                    "Dividimos por 2: S = \\dfrac{n}{2} [2a₁ + (n-1)d]",
-                    "Sabendo que a_n = a₁ + (n-1)d, podemos reescrever: S = \\dfrac{n}{2} (a_1 + a_n)"
-                ]
-            },
-            {
-                nome: "Lei dos senos",
-                formula: "\\dfrac{a}{\\sin A} = \\dfrac{b}{\\sin B} = \\dfrac{c}{\\sin C} = 2R",
-                area: "Trigonometria — Triângulos quaisquer",
-                dica: "Relação entre lados e ângulos opostos",
-                passos: [
-                    "Seja um triângulo ABC com lados a, b, c opostos aos ângulos A, B, C.",
-                    "A área do triângulo pode ser calculada de três formas:",
-                    "Área = (1/2) b c \\sin A",
-                    "Área = (1/2) a c \\sin B",
-                    "Área = (1/2) a b \\sin C",
-                    "Igualando as expressões: (1/2) b c \\sin A = (1/2) a c \\sin B = (1/2) a b \\sin C",
-                    "Cancelamos o 1/2 e multiplicamos cruzado: b c \\sin A = a c \\sin B = a b \\sin C",
-                    "Dividimos todos os termos por a b c: \\dfrac{\\sin A}{a} = \\dfrac{\\sin B}{b} = \\dfrac{\\sin C}{c}",
-                    "Invertendo a igualdade: \\dfrac{a}{\\sin A} = \\dfrac{b}{\\sin B} = \\dfrac{c}{\\sin C}",
-                    "Esse valor comum é igual a 2R, onde R é o raio da circunferência circunscrita ao triângulo."
-                ]
-            }
-        ];
-
-        function popularMenu() {
-            const menu = document.getElementById('menu');
-            menu.innerHTML = '';
-            FORMULAS.forEach(f => {
-                const card = document.createElement('div');
-                card.className = 'formula-card';
-                card.innerHTML = `<h3>${f.nome}</h3><p style="color:#555;">${f.area}</p>`;
-                card.addEventListener('click', () => mostrarProva(f));
-                menu.appendChild(card);
-            });
+<script>
+    const demonstrations = {
+        pitagoras: {
+            title: "Teorema de Pitágoras",
+            steps: [
+                { t: "O Enunciado", c: "Em qualquer triângulo retângulo, o quadrado da hipotenusa é igual à soma dos quadrados dos catetos: $$a^2 + b^2 = c^2$$" },
+                { t: "Construção", c: "Imagine um quadrado maior de lado $(a+b)$. Dentro dele, posicionamos 4 triângulos retângulos iguais." },
+                { t: "Áreas", c: "A área do quadrado maior pode ser vista de duas formas: $$(a+b)^2 = 4 \cdot \left(\frac{ab}{2}\right) + c^2$$" },
+                { t: "Simplificação", c: "Expandindo o binômio: $a^2 + 2ab + b^2 = 2ab + c^2$. Cancelando $2ab$, chegamos a: $$a^2 + b^2 = c^2$$" }
+            ]
+        },
+        gauss: {
+            title: "Soma de Gauss (P.A.)",
+            steps: [
+                { t: "O Desafio", c: "Somar os números de 1 a $n$: $$S_n = 1 + 2 + 3 + ... + n$$" },
+                { t: "O Truque", c: "Escreva a soma duas vezes, uma delas em ordem inversa: $$S_n = 1 + 2 + ... + n$$ $$S_n = n + (n-1) + ... + 1$$" },
+                { t: "Soma das Colunas", c: "Observe que cada par vertical soma $(n+1)$. Como temos $n$ colunas: $$2S_n = n(n + 1)$$" },
+                { t: "Resultado", c: "Dividindo por 2, obtemos a fórmula clássica: $$S_n = \frac{n(n+1)}{2}$$" }
+            ]
+        },
+        trigo: {
+            title: "Identidade Trigonométrica Fundamental",
+            steps: [
+                { t: "Círculo Unitário", c: "Considere um círculo de raio $r=1$ no plano cartesiano." },
+                { t: "Coordenadas", c: "Para qualquer ponto no círculo com ângulo $\theta$, temos $x = \cos(\theta)$ e $y = \sin(\theta)$." },
+                { t: "Aplicação", c: "Como a distância do ponto à origem é 1, pelo Teorema de Pitágoras ($x^2 + y^2 = r^2$): $$\cos^2(\theta) + \sin^2(\theta) = 1$$" }
+            ]
+        },
+        primos: {
+            title: "Infinitude dos Primos (Euclides)",
+            steps: [
+                { t: "Suposição", c: "Suponha que existe uma lista finita de todos os números primos: $P = \{p_1, p_2, ..., p_n\}$." },
+                { t: "Construção de N", c: "Crie um novo número $N$ multiplicando todos os primos e somando 1: $$N = (p_1 \cdot p_2 \cdot ... \cdot p_n) + 1$$" },
+                { t: "O Dilema", c: "Se dividirmos $N$ por qualquer primo da nossa lista, o resto será sempre 1." },
+                { t: "Conclusão", c: "Portanto, ou $N$ é um novo primo ou possui um divisor primo que não está na nossa lista. Isso prova que o conjunto dos primos não pode ser finito." }
+            ]
+        },
+        geometrica: {
+            title: "Soma da Série Geométrica",
+            steps: [
+                { t: "Definição", c: "Seja $S$ a soma infinita: $$S = 1 + r + r^2 + r^3 + ...$$ onde $|r| < 1$." },
+                { t: "O Truque Algébrico", c: "Multiplique toda a equação por $r$: $$rS = r + r^2 + r^3 + r^4 + ...$$" },
+                { t: "Subtração", c: "Subtraia $rS$ de $S$: $$S - rS = 1$$" },
+                { t: "Resultado", c: "Fatorando $S(1-r) = 1$, temos: $$S = \frac{1}{1-r}$$" }
+            ]
+        },
+        newton: {
+            title: "Binômio de Newton",
+            steps: [
+                { t: "Expansão", c: "A fórmula descreve a potência de uma soma: $$(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k}b^k$$" },
+                { t: "Coeficiente Binomial", c: "Onde o termo $\binom{n}{k}$ representa as combinações e é calculado por: $$\frac{n!}{k!(n-k)!}$$" }
+            ]
+        },
+        euler: {
+            title: "A Identidade de Euler",
+            steps: [
+                { t: "Fórmula Geral", c: "A identidade deriva da fórmula de Euler para análise complexa: $$e^{ix} = \cos(x) + i\sin(x)$$" },
+                { t: "Caso Especial", c: "Se substituirmos $x$ por $\pi$ radianos: $$e^{i\pi} = \cos(\pi) + i\sin(\pi)$$" },
+                { t: "Valores", c: "Sabemos que $\cos(\pi) = -1$ e $\sin(\pi) = 0$. Logo: $$e^{i\pi} = -1 + 0i$$" },
+                { t: "A Elegância", c: "Reorganizando, obtemos a fórmula que une os 5 números mais importantes da matemática: $$e^{i\pi} + 1 = 0$$" }
+            ]
         }
+    };
 
-        function mostrarProva(f) {
-            document.getElementById('nome').textContent = f.nome;
-            document.getElementById('area').textContent = f.area;
-            document.getElementById('dica').textContent = f.dica;
+    function loadContent(key, element) {
+        // Atualizar menu
+        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
 
-            katex.render(f.formula, document.getElementById('formula'), {
-                throwOnError: false
-            });
+        // Gerar HTML
+        const data = demonstrations[key];
+        let html = `<h2>${data.title}</h2><br>`;
+        
+        data.steps.forEach(step => {
+            html += `
+                <div class="step-box">
+                    <div class="step-title">${step.t}</div>
+                    <div class="step-content">${step.c}</div>
+                </div>
+            `;
+        });
 
-            const ol = document.getElementById('passos');
-            ol.innerHTML = '';
-            f.passos.forEach(p => {
-                const li = document.createElement('li');
-                li.innerHTML = p;  // permite <span> ou <em> se quiser destacar depois
-                ol.appendChild(li);
-            });
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = html;
 
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('prova').style.display = 'block';
-            renderMathInElement(ol); // re-renderiza qualquer LaTeX nos passos
-        }
+        // Renderizar fórmulas novas
+        renderMathInElement(contentDiv, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });
+    }
 
-        function voltarMenu() {
-            document.getElementById('menu').style.display = 'flex';
-            document.getElementById('prova').style.display = 'none';
-        }
+    // Carregar inicial
+    window.onload = () => {
+        loadContent('pitagoras', document.querySelector('.menu-item'));
+    };
+</script>
 
-        document.addEventListener('DOMContentLoaded', popularMenu);
-    </script>
 </body>
 </html>
